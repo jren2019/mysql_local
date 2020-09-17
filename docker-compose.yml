@@ -1,0 +1,27 @@
+version: '3.6'
+    
+services: 
+    # MySQL
+    db:
+        container_name: mysql_local
+        image: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 'root'
+            MYSQL_DATABASE: 'mysql_local'
+            MYSQL_PASSWORD: 'root'
+
+        volumes: 
+            - ./init:/docker-entrypoint-initdb.d:rw
+            - ../mysql_data:/var/lib/mysql:rw
+        ports:
+            - "3306:3306"
+        cap_add:
+            - SYS_NICE  # CAP_SYS_NICE
+    
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
