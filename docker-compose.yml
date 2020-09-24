@@ -1,6 +1,6 @@
 version: '3.6'
-    
-services: 
+
+services:
     # MySQL
     db:
         container_name: mysql_local
@@ -12,14 +12,20 @@ services:
             MYSQL_DATABASE: 'mysql_local'
             MYSQL_PASSWORD: 'root'
 
-        volumes: 
+        volumes:
             - ./init:/docker-entrypoint-initdb.d:rw
             - ../mysql_data:/var/lib/mysql:rw
         ports:
             - "3306:3306"
         cap_add:
             - SYS_NICE  # CAP_SYS_NICE
-    
+    cache:
+        image: redis
+        container_name: redis
+        restart: unless-stopped
+        ports:
+          - "6379:6379"
+
     adminer:
         image: adminer
         restart: always
